@@ -4,16 +4,12 @@ layout: default
 
 <div class="post">
   <h1>{{ page.title }}</h1>
-  {% for tag in page.tags %}
-  {% capture tag_name %}{{ tag }}{% endcapture %}
-  <h2>{{ tag_name }}</h2>
-  {% endfor %}]
   <span class="fs-4 text-muted">{{ page.date | date: "%b %d, %y" }}</span>
   <div class="mt-4">{{ content }}</div>
-  <span>[
+  <span>
   {% for tag in page.tags %}
     {% capture tag_name %}{{ tag }}{% endcapture %}
     <a href="/tag/{{ tag_name }}"><code class="highligher-rouge"><nobr>{{ tag_name }}</nobr></code>&nbsp;</a>
-  {% endfor %}]
+  {% endfor %}
   </span>	
 </div>
