@@ -1,6 +1,6 @@
-- name: Home
+- name: Blog
   link: /
-- name: About
+- name: Sobre mi
   link: /about/
-- name: Portfolio
-  link: /portfolio/
+- name: Tags
+  link: /tagpage/
