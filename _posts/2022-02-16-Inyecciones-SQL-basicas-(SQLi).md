@@ -2,7 +2,7 @@
 layout: post
 title: Hello World
 description: blablabla
-tags: [ write-ups , seguridad , sqli ]
+tags: [ write-ups , seguridad , sqli, portswigger ]
 ---
 
 Con este post inauguro un blog. Un blog que no sé dónde me llevará, ni hasta dónde seré capaz de actualizar. Pretendo simplemente llevar un registro de todo lo que aprendo en el mundo de la informática. Ciberseguridad, DevSecOps, DevOps, snippets de código y cosas por el estilo serán el foco principal.
