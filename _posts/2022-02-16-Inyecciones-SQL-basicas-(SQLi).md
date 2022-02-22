@@ -2,7 +2,7 @@
 layout: post
 title: Inyecciones SQL básicas (SQLI)
 description: Introducción a las inyecciones SQL (SQLI) y write ups de algunos labs de Portswigger 
-tags: [ write-ups , seguridad , sqli, portswigger ]
+tags: [ write-ups , seguridad , SQLi, portswigger ]
 ---
 
 Con este post inauguro un blog. Un blog que no sé dónde me llevará, ni hasta dónde seré capaz de actualizar. Pretendo simplemente llevar un registro de todo lo que aprendo en el mundo de la informática. Ciberseguridad, DevSecOps, DevOps, snippets de código y cosas por el estilo serán el foco principal.
