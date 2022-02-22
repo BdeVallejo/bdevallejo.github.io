@@ -9,13 +9,15 @@ Con este post inauguro un blog. Un blog que no sé dónde me llevará, ni hasta 
 
 Allá voy.
 
-##Introducción a SQLi
+## Introducción a SQLi
 
 En el post de hoy voy a tratar de indagar en las inyecciones SQL. Unas de las vulnerabilidades de las que más se habla, y posiblemente una de las más peligrosas, ya que puede exponer todos los datos de nuestro servidor.
 
 El caso más típico y más sencillo es la manipulación de un request cualquiera. Imaginemos una página cuya URL es algo como
 
-`https://mi-tienda.com/productos?categoria=Coches`
+`
+https://mi-tienda.com/productos?categoria=Coches
+`
 
 Coches es el parámetro que se utilizará en el código SQL para buscar todos los productos que corresponden a esa categoría, con un comando similar a este:
 
@@ -24,7 +26,7 @@ Coches es el parámetro que se utilizará en el código SQL para buscar todos lo
 Si el comando no está saneado de la forma correcta, ( y espero escribir otro post pronto sobre ello ), podríamos obtener mucha más información simplemente escribiendo en la URL parámetros que se traduzcan en comandos SQL. Muchas de las inyecciones SQL son sencillas de ejecutar, pero para visualizarlo mejor, 
 voy a utilizar los [Labs de PortSwigger](https://portswigger.net/web-security/all-labs), ya que tienen muchos niveles, son gratuítos y por ende son perfectos para iniciarse en las inyecciones SQL (SQLi).
 
-###Lab #1: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data.
+### Lab #1: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data.
 
 Tal y como aparece en la descripción, el lab es sensible a inyecciones SQL. Nada más entrar, navego por las diferentes categorías, y compruebo que la url cambia el parámetro _category_. Por tanto, el comando SQL que se ejecuta es algo como
 
@@ -38,9 +40,11 @@ Siendo released=1 los productos que se pueden mostrar. Pues bien, con añadir se
 
 Sabiendo que 1=1 va a retornar siempre verdadero (true), la inyección nos devolverá todos los productos de todas las categorías.
 
-**Solución:** `https://.../filter?category=Corporate+gifts’+OR+1=1–`
+**Solución:** 
 
-###Lab #2: SQL Injection vulnerability allowing login bypass
+`https://.../filter?category=Corporate+gifts’+OR+1=1–`
+
+### Lab #2: SQL Injection vulnerability allowing login bypass
 
 En la descripción nos dicen que el lab contiene una vulnerabilidad en el _login_, y que debemos intentar acceder como administradores (nombre de usuario _administrator_).
 
@@ -50,11 +54,12 @@ Pues bien, el sistema será parecido. Con sólo añadir un `'--` al usuario _adm
 
 Es decir, nos saltamos la parte en la que el comando comprueba el _password_. 
 
-**Solución:** nuestro nombre de usuario será `administrator'--` y el password será `' '`
+**Solución:** 
+nuestro nombre de usuario será `administrator'--` y el password será `' '`
 
 
 
-##Ataques SQLi usando el comando UNION
+## Ataques SQLi usando el comando UNION
 
 El comnado  UNION nos es útil a la hora de realizar ataques SQL. 
 Por ejemplo, nos pueden servir para obtener información de la tabla sobre la que estamos ejecutando un comando y sobre otras tablas. Básicamente, un comando UNION nos permite extender el comando SELECT de manera que un comando como:
@@ -63,55 +68,82 @@ SELECT x , y FROM productos UNION SELECT a , b FROM clientes
 
 Nos devolvería dos columnas con los valores x e y además de otras dos columnas con los valores a y b. El problema al que a menudo nos enfrentamos es que ambos comandos han de tener el mismo número de columnas.
 
-###Lab #3 : 
+### Lab #3 : SQL injection UNION attack, determining the number of columns returned by the query 
+
+El reto consiste precisamente en buscar el número de columnas de la tabla category:
+
+Nada más abrir la página del lab, hago click en cualquiera de las categorías (en mi caso Food & Drink). Tan sólo hay que añadir UNION SELECT y algún valor que no genere ninguna respuesta inadecuada en el comando, para lo cual el parámetro NULL nos viene perfecto. Así que hemos de añadir ‘+UNION+SELECT+NULL– a la url. Si todo va bien, nos devolverá una página con el status 200. De no ser así, habrá que ir añadiendo ,NULL hasta que funcione, y así sabremos el número de columnas de la tabla. 
+
+**Solución:**  
+`https://..?category=Food+%26+Drink%27+UNION+SELECT+NULL,NULL,NULL--`
+
+Es decir, 3 columnas. 
+
+### Lab #4 : SQL injection UNION attack, finding a column containing text
+
+De nuevo, nuestro lab contiene una vulnerabilidad en category. Ya sabemos que hay 3 columnas, pero ahora debemos averigüar qué columna es de tipo string.
+
+Con lo que hemos visto hasta ahora, resulta sencillo. Simplemente habría que ir reemplazando los NULL del ejercicio anterior por un parámetro de tipo string (de tipo texto) , por ejemplo ‘a’ (una vez dentro del lab hay una pequeña descripción que dice que tenemos que hacer que la base de datos nos devuelva ‘BVWP3H’)
+
+**Solución:** 
+`https://...filter?category=Clothing%2c+shoes+and+accessories%27+UNION+SELECT+NULL,%27BVWP3H%27,NULL–`
+
+Es decir, la segunda columna es de tipo string. 
+
+Con esta información podemos crear una petición a nuestra medida y rellenar la respuesta con información de otras tablas mediante el parámetro UNION. Es decir, añadir a la petición legítima otra petición que devuelve el mismo tipo de valor pero dirigida a una tabla diferente. 
+
+El siguiente reto ayuda a entenderlo mejor.
+
+### Lab #5 : SQL injection UNION attack, retrieving data from other tables
+
+Se trata de un lab similar a los dos anteriores, pero en esta ocasión hay que acceder a una tabla users que a su vez contiene dos columnas, username y password. En la vida real podría tratarse de un ejemplo totalmente válido, ya que muchas bases de datos tienen una tabla similar. Pero recomiendo echar un ojo a este enlace si lo que queremos es saber qué tablas existen en la base de datos y qué columnas tienen.
+
+Empiezo inyectando un ataque mediante UNION añadiendo '+UNION+SELECT+NULL– a la url. No funciona. Añado otro NULL más y ahora sí. 
+
+`https://…/filter?category=Gifts%27+UNION+SELECT+NULL,NULL– `
+
+Funciona. Hay dos columnas. 
+
+Deduzco que ambas son de tipo string pero por si acaso, compruebo. 
+
+`https://..filter?category=Gifts%27+UNION+SELECT+%27a%27,%27b%27–`
+
+Todo correcto. Tan sólo queda reemplazar los valores ‘a’ y ‘b’ del parámetro anterior por username y password y añadir la tabla sobre la que queremos lanzar la búsqueda (FROM users en este caso). 
+
+**Solución:** 
+`https://acb31fdf1efcae16c02c9680008d005d.web-security-academy.net/filter?category=Gifts%27+UNION+SELECT+username,password+FROM+users–`
+
+Y listo. En la respuesta se añadieron los usuarios wiene, administrator y carlos. Copio el password de administrator para hacer log in y reto superado.
+
+Ahora bien, ¿qué occuriría si la tabla sobre la que quiero ejecutar mi petición sólo dispone de una columna y yo quiero obtener información de dos columnas? El siguiente reto va precisamente de eso:
+
+### Lab #6 : SQL injection UNION attack, retrieving multiple values in a single column
+
+Una vez más, empiezo inyectando un ataque mediante UNION añadiendo '+UNION+SELECT+NULL– a la url. No funciona. Añado otro NULL más y ahora sí. 
+
+`https://…/filter?category=Gifts%27+UNION+SELECT+NULL,NULL– `
+
+Funciona. Hay dos columnas. 
+
+Ahora bien, en esta ocasión creo que sólo una de ellas será de tipo string. Lo compruebo con 
+
+`https://ac211fd71f9c8c3bc02c4a59002a009f.web-security-academy.net/filter?category=Corporate+gifts%27+UNION+SELECT+%27a%27,%27b%27–`
+
+que no funciona. Cambio a :
+
+```https://ac211fd71f9c8c3bc02c4a59002a009f.web-security-academy.net/filter?category=Corporate+gifts%27+UNION+SELECT+%27a%27,NULL–```
+
+Y tampoco. Y por fin:
+```https://ac211fd71f9c8c3bc02c4a59002a009f.web-security-academy.net/filter?category=Corporate+gifts%27+UNION+SELECT+NULL,%27a%27–```
+
+Me da una respuesta válida. ¿Y ahora, cómo obtengo el username y password en una sola petición? Mi primer instinto es hacer dos separadas, una para el username y otra para el password. Y efectivamente, funciona. Obtengo los nombres de usuario y los passwords por separado, pero no sería difícil combinarlos ( hay sólo 3 ). 
+
+El ejercicio sin embargo no va de eso, así que investigo un poco más. En este enlace vienen algunos ejemplos de string concatenation útiles. Pruebo con el primero para bases de datos Oracle y bingo. 
+
+**Solución:** 
+`https://../filter?category=Corporate+gifts%27+UNION+SELECT+NULL,username||password+FROM+users–`
+
+Retorna el administrador junto al password. Hago log in y reto superado. 
 
 
-## Some great heading (h2)
 
-Proin convallis mi ac felis pharetra aliquam. Curabitur dignissim accumsan rutrum. In arcu magna, aliquet vel pretium et, molestie et arcu.
-
-Mauris lobortis nulla et felis ullamcorper bibendum. Phasellus et hendrerit mauris. Proin eget nibh a massa vestibulum pretium. Suspendisse eu nisl a ante aliquet bibendum quis a nunc. Praesent varius interdum vehicula. Aenean risus libero, placerat at vestibulum eget, ultricies eu enim. Praesent nulla tortor, malesuada adipiscing adipiscing sollicitudin, adipiscing eget est.
-
-### Blockquotes (h3)
-
-Praesent varius interdum vehicula. Aenean risus libero, placerat at vestibulum eget, ultricies eu enim. Praesent nulla tortor, malesuada adipiscing adipiscing sollicitudin, adipiscing eget est.
-
-> This quote will _change_ your life. It will reveal the <i>secrets</i> of the universe, and all the wonders of humanity. Don't <em>misuse</em> it.
-
-### Code blocks (h3)
-
-Vestibulum lacus tortor, ultricies id dignissim ac, bibendum in velit. Proin convallis mi ac felis pharetra aliquam. Curabitur dignissim accumsan rutrum.
-
-```javascript
-function sayHello(name) {
-  if (!name) {
-    console.log("Hello World");
-  } else {
-    console.log(`Hello ${name}`);
-  }
-}
-```
-
-In arcu magna, aliquet vel pretium et, molestie et arcu. Mauris lobortis nulla et felis ullamcorper bibendum. Phasellus et hendrerit mauris.
-
-##### Inline code, `pacman` (h5)
-
-In arcu magna, aliquet vel pretium et, molestie et arcu. Mauris lobortis nulla et felis ullamcorper bibendum. Phasellus et hendrerit mauris.
-
-### Oh hai, an unordered list!!
-
-In arcu magna, aliquet vel pretium et, molestie et arcu. Mauris lobortis nulla et felis ullamcorper bibendum. Phasellus et hendrerit mauris.
-
-- First item, yo
-- Second item, dawg
-- Third item, what what?!
-- Fourth item, fo sheezy my neezy
-
-### Oh hai, an ordered list!!
-
-In arcu magna, aliquet vel pretium et, molestie et arcu. Mauris lobortis nulla et felis ullamcorper bibendum. Phasellus et hendrerit mauris.
-
-1. First item, yo
-2. Second item, dawg
-3. Third item, what what?!
-4. Fourth item, fo sheezy my neezy
