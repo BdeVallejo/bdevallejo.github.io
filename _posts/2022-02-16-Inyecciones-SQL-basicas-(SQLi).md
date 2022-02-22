@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Hello World
-description: blablabla
+title: Inyecciones SQL básicas (SQLI)
+description: Introducción a las inyecciones SQL (SQLI) y write ups de algunos labs de Portswigger 
 tags: [ write-ups , seguridad , sqli, portswigger ]
 ---
 
