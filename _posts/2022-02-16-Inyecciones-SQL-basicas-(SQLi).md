@@ -5,11 +5,24 @@ description: Introducción a las inyecciones SQL (SQLI) y write ups de algunos l
 tags: [ write-ups , seguridad , SQLi, portswigger ]
 ---
 
+# Indice
+1. [Introducción a SQLi](#introduction)
+
+    1. [Lab #1: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data.](#lab1)
+    2. [Lab #2: SQL Injection vulnerability allowing login bypass](#lab2)
+
+2. [Ataques SQLi usando el comando UNION](#comandounion)
+    1. [Lab #3 : SQL injection UNION attack, determining the number of columns returned by the query](#lab3)
+    2. [Lab #4 : SQL injection UNION attack, finding a column containing text](#lab4)
+    3. [Lab #5 : SQL injection UNION attack, retrieving data from other tables](#lab5)
+    4. [Lab #6 : SQL injection UNION attack, retrieving multiple values in a single column](#lab6)
+
+
 Con este post inauguro un blog. Un blog que no sé dónde me llevará, ni hasta dónde seré capaz de actualizar. Pretendo simplemente llevar un registro de todo lo que aprendo en el mundo de la informática. Ciberseguridad, DevSecOps, DevOps, snippets de código y cosas por el estilo serán el foco principal.
 
 Allá voy.
 
-## Introducción a SQLi
+# Introducción a SQLi<a id="introduction"></a>
 
 En el post de hoy voy a tratar de indagar en las inyecciones SQL. Unas de las vulnerabilidades de las que más se habla, y posiblemente una de las más peligrosas, ya que puede exponer todos los datos de nuestro servidor.
 
@@ -26,7 +39,9 @@ Coches es el parámetro que se utilizará en el código SQL para buscar todos lo
 Si el comando no está saneado de la forma correcta, ( y espero escribir otro post pronto sobre ello ), podríamos obtener mucha más información simplemente escribiendo en la URL parámetros que se traduzcan en comandos SQL. Muchas de las inyecciones SQL son sencillas de ejecutar, pero para visualizarlo mejor, 
 voy a utilizar los [Labs de PortSwigger](https://portswigger.net/web-security/all-labs), ya que tienen muchos niveles, son gratuítos y por ende son perfectos para iniciarse en las inyecciones SQL (SQLi).
 
-### Lab #1: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data.
+
+
+## Lab #1: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data.<a id="lab1"></a>
 
 Tal y como aparece en la descripción, el lab es sensible a inyecciones SQL. Nada más entrar, navego por las diferentes categorías, y compruebo que la url cambia el parámetro _category_. Por tanto, el comando SQL que se ejecuta es algo como
 
@@ -44,7 +59,9 @@ Sabiendo que 1=1 va a retornar siempre verdadero (true), la inyección nos devol
 
 `https://.../filter?category=Corporate+gifts’+OR+1=1–`
 
-### Lab #2: SQL Injection vulnerability allowing login bypass
+
+
+## Lab #2: SQL Injection vulnerability allowing login bypass <a id="lab2"></a>
 
 En la descripción nos dicen que el lab contiene una vulnerabilidad en el _login_, y que debemos intentar acceder como administradores (nombre de usuario _administrator_).
 
@@ -59,7 +76,8 @@ nuestro nombre de usuario será `administrator'--` y el password será `' '`
 
 
 
-## Ataques SQLi usando el comando UNION
+
+# Ataques SQLi usando el comando UNION<a id="comandounion"></a>
 
 El comnado  UNION nos es útil a la hora de realizar ataques SQL. 
 Por ejemplo, nos pueden servir para obtener información de la tabla sobre la que estamos ejecutando un comando y sobre otras tablas. Básicamente, un comando UNION nos permite extender el comando SELECT de manera que un comando como:
@@ -68,7 +86,9 @@ SELECT x , y FROM productos UNION SELECT a , b FROM clientes
 
 Nos devolvería dos columnas con los valores x e y además de otras dos columnas con los valores a y b. El problema al que a menudo nos enfrentamos es que ambos comandos han de tener el mismo número de columnas.
 
-### Lab #3 : SQL injection UNION attack, determining the number of columns returned by the query 
+
+
+## Lab #3 : SQL injection UNION attack, determining the number of columns returned by the query <a id="lab3"></a>
 
 El reto consiste precisamente en buscar el número de columnas de la tabla category:
 
@@ -79,7 +99,9 @@ Nada más abrir la página del lab, hago click en cualquiera de las categorías 
 
 Es decir, 3 columnas. 
 
-### Lab #4 : SQL injection UNION attack, finding a column containing text
+
+
+## Lab #4 : SQL injection UNION attack, finding a column containing text<a id="lab4"></a>
 
 De nuevo, nuestro lab contiene una vulnerabilidad en category. Ya sabemos que hay 3 columnas, pero ahora debemos averigüar qué columna es de tipo string.
 
@@ -94,7 +116,9 @@ Con esta información podemos crear una petición a nuestra medida y rellenar la
 
 El siguiente reto ayuda a entenderlo mejor.
 
-### Lab #5 : SQL injection UNION attack, retrieving data from other tables
+
+
+## Lab #5 : SQL injection UNION attack, retrieving data from other tables<a id="lab5"></a>
 
 Se trata de un lab similar a los dos anteriores, pero en esta ocasión hay que acceder a una tabla users que a su vez contiene dos columnas, username y password. En la vida real podría tratarse de un ejemplo totalmente válido, ya que muchas bases de datos tienen una tabla similar. Pero recomiendo echar un ojo a este enlace si lo que queremos es saber qué tablas existen en la base de datos y qué columnas tienen.
 
@@ -117,7 +141,9 @@ Y listo. En la respuesta se añadieron los usuarios wiene, administrator y carlo
 
 Ahora bien, ¿qué occuriría si la tabla sobre la que quiero ejecutar mi petición sólo dispone de una columna y yo quiero obtener información de dos columnas? El siguiente reto va precisamente de eso:
 
-### Lab #6 : SQL injection UNION attack, retrieving multiple values in a single column
+
+
+## Lab #6 : SQL injection UNION attack, retrieving multiple values in a single column<a id="lab6"></a>
 
 Una vez más, empiezo inyectando un ataque mediante UNION añadiendo '+UNION+SELECT+NULL– a la url. No funciona. Añado otro NULL más y ahora sí. 
 
