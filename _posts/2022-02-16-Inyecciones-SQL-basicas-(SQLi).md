@@ -16,6 +16,7 @@ tags: [ write-ups , seguridad , SQLi, portswigger ]
     2. [Lab #4 : SQL injection UNION attack, finding a column containing text](#lab4)
     3. [Lab #5 : SQL injection UNION attack, retrieving data from other tables](#lab5)
     4. [Lab #6 : SQL injection UNION attack, retrieving multiple values in a single column](#lab6)
+3. [Links](#links)    
 
 
 Con este post inauguro un blog. Un blog que no sé dónde me llevará, ni hasta dónde seré capaz de actualizar. Pretendo simplemente llevar un registro de todo lo que aprendo en el mundo de la informática. Ciberseguridad, DevSecOps, DevOps, snippets de código y cosas por el estilo serán el foco principal.
@@ -172,4 +173,10 @@ El ejercicio sin embargo no va de eso, así que investigo un poco más. En este 
 Retorna el administrador junto al password. Hago log in y reto superado. 
 
 
+
+# Links <a id="links"></a>
+Aquí dejo un par de links interesantes para más información.
+
+https://owasp.org/www-community/attacks/SQL_Injection_Bypassing_WAF
+https://portswigger.net/web-security/sql-injection/cheat-sheet
 
