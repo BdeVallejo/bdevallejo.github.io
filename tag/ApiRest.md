@@ -1,5 +1,5 @@
 ---
 layout: tagpage
-title: "Tag: API Rest"
-tag: API Rest
+title: "Tag: APIRest"
+tag: APIRest
 ---

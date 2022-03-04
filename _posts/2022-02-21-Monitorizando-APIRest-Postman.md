@@ -2,7 +2,7 @@
 layout: post
 title: Monitorizando una API Rest con Postman
 description: Tests sencillos para monitorizar una API Rest con Postman
-tags: [ Postman , testing , API Rest ]
+tags: [ Postman , testing , APIRest ]
 ---
 
 # Indice
