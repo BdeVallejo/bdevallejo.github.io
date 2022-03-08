@@ -9,11 +9,11 @@ tags: [ write-ups , seguridad , TryHackMe, Fuzzing ]
 1. [Introducción](#introduction)
 
 2. [Reconocimiento](#reconocimiento)
-    1. [nmap](#lab3)
-    2. [Lab #4 : SQL injection UNION attack, finding a column containing text](#lab4)
-    3. [Lab #5 : SQL injection UNION attack, retrieving data from other tables](#lab5)
-    4. [Lab #6 : SQL injection UNION attack, retrieving multiple values in a single column](#lab6)
-3. [Links](#links)    
+    1. [nmap](#nmap)
+    2. [gobuster](#gobuster)
+    4. [wfuzz](#nmap)
+3. [Reverse Shell con Python](#reverse-shell)
+4. [Un poco de ingeniería inversa](#ingenieria-inversa) 
 
 
 # Introducción <a id="introduction"></a>
