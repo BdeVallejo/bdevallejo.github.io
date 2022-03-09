@@ -14,7 +14,7 @@ img {
 
 .navbar {
   margin-bottom: 2rem;
-  border-bottom: 0.125rem solid hsl(0, 0%, 30%);
+  border-bottom: 0.125rem solid #F48C78;
 }
 
 .archive-year {
@@ -49,15 +49,15 @@ img {
 .footer-icon-links:hover,
 .footer-icon-links:focus {
   text-decoration: none;
-  color: #212529;
+  color: #F48C78;
 }
 
 .archive-title {
-  color: #212529;
+  color: #F48C78;
 }
 
 .highlight {
-  background-color: #272822;
+  background-color: #F48C78;
 }
 
 pre.highlight {
@@ -76,17 +76,17 @@ pre.highlight {
 @media (prefers-color-scheme: dark) {
   .footer-icon-links {
     text-decoration: none;
-    color: #e1e1e1;
+    color: #F48C78;
   }
 
   .footer-icon-links:hover,
   .footer-icon-links:focus {
     text-decoration: none;
-    color: #e1e1e1;
+    color: #F48C78;
   }
 
   .archive-title {
-    color: #e1e1e1;
+    color: #F48C78;
   }
 
   .light-avatar {

