@@ -13,4 +13,4 @@ Si escribo algo que consideras que puedo corregir o mejorar, no dudes en contact
 
 # Contacta conmigo
 
-[email@domain.com](mailto:email@domain.com)
+[bdevallejo@protonmail.com](mailto:bdevallejo@protonmail.com)
