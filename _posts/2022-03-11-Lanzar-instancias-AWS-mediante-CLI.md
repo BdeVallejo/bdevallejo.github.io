@@ -60,26 +60,26 @@ Cada VPC tiene un bloque de direcciones IP. Aquí entra el concepto de CIDR (Cla
 
 Primeramente crearemos la VPC de la siguiente manera:
 
-´´´
+```
 VPC_ID=$(aws ec2 create-vpc --cidr-block 10.0.0.0/16 --output text --query 'Vpc.VpcId')
 
 aws ec2 create-tags --resources ${VPC_ID} --tags Key=Name,Value=mi-vpc
 aws ec2 modify-vpc-attribute --vpc-id ${VPC_ID} --enable-dns-support '{"Value": true}'
 aws ec2 modify-vpc-attribute --vpc-id ${VPC_ID} --enable-dns-hostnames '{"Value": true}'
-´´´
+```
 
 ## Subnet<a id="subnet"></a>
 
 Como he puesto arriba, cada VPC tiene una o varias subnets con un bloque de direcciones IP. La creamos de la siguiente forma. Lógicamente el bloque de IPs de la subnet es menor que el de la VPC.
 
-´´´
+```
 SUBNET_ID=$(aws ec2 create-subnet \
   --vpc-id ${VPC_ID} \
   --cidr-block 10.0.1.0/24 \
   --output text --query 'Subnet.SubnetId')
 
 aws ec2 create-tags --resources ${SUBNET_ID} --tags Key=Name,Value=mi-subnet
-´´´
+```
 
 ## Internet Gateway y tabla de enrutamiento<a id="gateway"></a>
 
@@ -91,7 +91,6 @@ Internet Gateway:
 INTERNET_GATEWAY_ID=$(aws ec2 create-internet-gateway --output text --query 'InternetGateway.InternetGatewayId')
 
 aws ec2 create-tags --resources ${INTERNET_GATEWAY_ID} --tags Key=Name,Value=mi-gateway
-aws ec2 attach-internet-gateway --internet-gateway-id ${INTERNET_GATEWAY_ID} --vpc-id ${VPC_ID}
 ```
 
 Tabla de enrutamiento:
@@ -138,7 +137,7 @@ Con todo lo anterior me dispongo a crear una instancia de EC2 (en este caso una 
 
 ```
 aws ec2 run-instances --image-id ami-0d527b8c289b4af7f --count 1 --instance-type t2.micro --key- name <miLlaveValor> --security-group-ids <id-del-security-group> --subnet-id <id-de-la-subnet> -- associate-public-ip-address
-````
+```
 
 Una vez hayamos completado el ejercicio, no hay que olvidar borrar todas las instancias si no queremos tener gastos no deseados.
 
