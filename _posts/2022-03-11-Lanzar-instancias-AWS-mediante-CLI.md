@@ -9,11 +9,14 @@ tags: [ AWS , EC2, DevOps ]
 1. [Introducción](#introduction)
 
 2. [Configuración de AWS CLI](#configuracion)
-    1. [nmap](#nmap)
-    2. [gobuster](#gobuster)
-    4. [wfuzz](#nmap)
-3. [Reverse Shell con Python](#reverse-shell)
-4. [Un poco de ingeniería inversa](#ingenieria-inversa) 
+
+3. [Networking](#networking)
+    1. [Virtual Private Cloud (VPC)](#vpc)
+    2. [Subnet](#subnet)
+    3. [Internet Gateway y tabla de enrutamiento](#gateway)
+    4. [Security Group](#security)
+
+4. [Crear una instancia de ECS](#instancia) 
 
 
 # Introducción <a id="introduction"></a>

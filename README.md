@@ -1,4 +1,4 @@
-# brutalist-blog
+# Bruno de Vallejo´s Blog
 
 ## Introduction
 
