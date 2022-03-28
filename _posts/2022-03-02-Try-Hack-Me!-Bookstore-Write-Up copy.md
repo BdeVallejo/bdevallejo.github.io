@@ -11,7 +11,7 @@ tags: [ write-ups , seguridad , TryHackMe, Fuzzing ]
 2. [Reconocimiento](#reconocimiento)
     1. [nmap](#nmap)
     2. [gobuster](#gobuster)
-    4. [wfuzz](#nmap)
+    3. [wfuzz](#wfuzz)
 3. [Reverse Shell con Python](#reverse-shell)
 4. [Un poco de ingeniería inversa](#ingenieria-inversa) 
 
