@@ -1,6 +1,6 @@
 ---
 layout: post
-title: The Great Escape. Máquina de Try Hack Me
+title: The Great Escape | THM Write-Up
 description: Write up de mi experiencia con la máquina.
 tags: [ Docker , TryHackMe , seguridad, write-ups, Git ]
 ---
