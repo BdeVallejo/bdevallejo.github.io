@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Nuevo proyecto :\ librería de React
+title: Nuevo proyecto | librería de React
 description: Nuevo proyecto en marcha. Una libreria de React fácil de utilizar y customizar
 tags: [ React , libreria , GitHub ]
 ---
