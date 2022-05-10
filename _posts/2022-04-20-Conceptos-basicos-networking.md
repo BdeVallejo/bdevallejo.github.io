@@ -76,6 +76,6 @@ Afortunadamente, existen [calculadoras como esta](https://www.subnet-calculator.
 
 # CIDR<a id="cidr"></a>
 
-Cuando se habla de rangos de IP, a menudo se utilizan `/24`o bien `/16`. Esta notación se conoce como `CIDR notation`. Es una fórmula más moderna, pero básicamente se refiere a los mismo. 
+Cuando se habla de rangos de IP, a menudo se utilizan `/24` o bien `/16`.  Esta notación se conoce como `CIDR notation`. Es una fórmula más moderna, pero básicamente se refiere a los mismo. 
 
 Es decir, si hablamos de una subnet con /16, se puede decir que la subnet es 255.255.0.0. Si nos referimos a una subnet con /24, será 255.255.255.0. 
