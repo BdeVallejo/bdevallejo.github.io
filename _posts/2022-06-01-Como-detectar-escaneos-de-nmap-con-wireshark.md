@@ -42,13 +42,13 @@ tcp.port==443
 ``` 
 
 
-<img src="../assets/images/Detectar-escaneos-nmap/imagen5.png"
+<img src="../../assets/images/Detectar-escaneos-nmap/imagen5.png"
      alt="Trafico dirigido al puerto 443"
      style="float: center; margin-right: 10px; " />
 
 Y otra del tráfico dirigido al puerto 1234:
 
-<img src="../assets/images/Detectar-escaneos-nmap/imagen6.png"
+<img src="../../assets/images/Detectar-escaneos-nmap/imagen6.png"
      alt="Trafico dirigido al puerto 1234"
      style="float: center; margin-right: 10px; " />
 
@@ -86,7 +86,7 @@ tcp.completeness==39
 
 En este caso sólo he abierto uno de los puertos de la máquina víctima para hacer el ejercicio más claro: el puerto 1234. 
 
-<img src="../assets/images/Detectar-escaneos-nmap/imagen1.png"
+<img src="../../assets/images/Detectar-escaneos-nmap/imagen1.png"
      alt="Captura de Full Handshake en Wireshark"
      style="float: center; margin-right: 10px; " />
 
@@ -99,7 +99,7 @@ Ahora voy a filtrar por todas las peticiones que no han sido exitosas. Es decir,
 tcp.completeness==37
 ```
 
-<img src="../assets/images/Detectar-escaneos-nmap/imagen2.png"
+<img src="../../assets/images/Detectar-escaneos-nmap/imagen2.png"
      alt="Captura de Full Handshake en Wireshark 2"
      style="float: center; margin-right: 10px; " />
 
@@ -122,7 +122,7 @@ tcp.completeness==35
 
 Y ahora el resultado es de tan solo tres paquetes, todos ellos correspondientes al puerto 1234:
 
-<img src="../assets/images/Detectar-escaneos-nmap/imagen3.png"
+<img src="../../assets/images/Detectar-escaneos-nmap/imagen3.png"
      alt="Captura de Stealth Scan en Wireshark"
      style="float: center; margin-right: 10px; " />
 
@@ -155,7 +155,7 @@ Nmap usa por defecto una Window Size de 1024 en los paquetes SYN cuando hacemos 
 tcp.window_size_value == 1024
 ```
 
-<img src="../assets/images/Detectar-escaneos-nmap/image4.png"
+<img src="../../assets/images/Detectar-escaneos-nmap/image4.png"
      alt="Window Size en nmap"
      style="float: center; margin-right: 10px; " />
 
