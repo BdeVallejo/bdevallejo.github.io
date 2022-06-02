@@ -53,7 +53,7 @@ Y otra del tráfico dirigido al puerto 1234:
      style="float: center; margin-right: 10px; " />
 
 
-También podemos filtrar por puertos que utilizan por defecto algunos frameworks maliciosos, por ejemplo 4444 para Metasploit. En esta [fantástica hoja de calculo](https://docs.google.com/spreadsheets/d/17pSTDNpa0sf6pHeRhusvWG6rThciE8CsXTSlDUAZDyo/edit#gid=0), se han recopilado un montón de puertos sospechosos que pueden ser analizados. 
+También podemos filtrar por puertos que utilizan por defecto algunos frameworks maliciosos, por ejemplo 4444 para Metasploit. En esta [fantástica hoja de calculo](https://docs.google.com/spreadsheets/d/17pSTDNpa0sf6pHeRhusvWG6rThciE8CsXTSlDUAZDyo), se han recopilado un montón de puertos sospechosos que pueden ser analizados. 
 
 
 # Conceptos básicos de Flags TCP<a id="basicos"></a>
