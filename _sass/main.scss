@@ -8,7 +8,7 @@ blockquote {
 }
 
 body{
-  background-color: #212529 !important;
+  background-color: #293241 !important;
   color: whitesmoke !important;
 }
 
@@ -20,6 +20,11 @@ img {
 .navbar {
   margin-bottom: 2rem;
   border-bottom: 0.125rem solid #F48C78;
+}
+
+.nav-link {
+  color: whitesmoke !important;
+  text-transform: uppercase;
 }
 
 .archive-year {
