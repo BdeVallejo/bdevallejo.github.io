@@ -53,6 +53,9 @@ Y otra del tráfico dirigido al puerto 1234:
      style="float: center; margin-right: 10px; " />
 
 
+También podemos filtrar por puertos que utilizan por defecto algunos frameworks maliciosos, por ejemplo 4444 para Metasploit. En esta [fantástica hoja de calculo](https://docs.google.com/spreadsheets/d/17pSTDNpa0sf6pHeRhusvWG6rThciE8CsXTSlDUAZDyo/edit#gid=0), se han recopilado un montón de puertos sospechosos que pueden ser analizados. 
+
+
 # Conceptos básicos de Flags TCP<a id="basicos"></a>
 
 Como es bien sabido, es frecuente realizar escaneos con nmap jugando con el Flag TCP que se envía. Por ejemplo, el escaneo más frecuente que se utiliza en contextos de CTF es el `Stealth Scan` en el que se envían las flags SYN,SYN/ACK y Reset, sin completar el llamado TCP handshake y por tanto sin completar la conexión. Otro de los más famosos es el `xmas scan` en el que se mandan las flags FIN, PSH y URG. Si no tenéis ni idea de lo que hablo, echad un ojo a [este post que lo explica bastante bien](https://www.eduardocollado.com/2020/03/13/flags-de-tcp/). 
